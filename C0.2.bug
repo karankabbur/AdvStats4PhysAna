@@ -1,0 +1,21 @@
+# Bugs code to model the Cs-137 peak.
+## We have 4+1 unknowns, w, A,B, x0, delta_t
+# without taking delta_t into consideration, we have modellled the signal as a gaussian
+# with number of observed photons follows poisson distribution.
+
+model{
+    for (i in 1:length(x)){
+	S[i] <- (A*exp((-(x[i]-x0)^2)/(2*w^2))+B)
+	y[i] ~ dpois(S[i]) # likelihood of the data
+    } 
+    
+    # uniform prior w, A, B, x0
+    # the prior values for the params below were considered just by observing the graphs #so that chain doesn't waste time in checking out parameter space other than the given #limits as below	
+    A ~ dunif(0,12000)
+    B ~ dunif(0,500)
+    
+    w ~ dunif(0,40)
+    
+    x0 ~ dunif(3450,3500)
+    #delta_t ~ dunif(0,20)   
+}    
